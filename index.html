@@ -1,0 +1,75 @@
+<!doctype HTML>
+<html>
+
+<head>
+    <title>jQuery json-viewer</title>
+    <meta charset="utf-8" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="json-viewer/jquery.json-viewer.js"></script>
+    <script src="https://js.pusher.com/7.1/pusher.min.js"></script>
+    <link href="json-viewer/jquery.json-viewer.css" type="text/css" rel="stylesheet">
+
+    <style type="text/css">
+        body {
+            margin: 0 100px;
+            font-family: sans-serif;
+        }
+
+        p.options label {
+            margin-right: 10px;
+        }
+
+        p.options input[type=checkbox] {
+            vertical-align: middle;
+        }
+
+        textarea#json-input {
+            width: 100%;
+            height: 200px;
+        }
+
+        pre#json-renderer {
+            border: 1px solid #aaa;
+        }
+    </style>
+
+    <script>
+        $(function () {
+            let jsonArr = []
+
+            // Enable pusher logging - don't include this in production
+            Pusher.logToConsole = true;
+
+            var pusher = new Pusher('a91986263eb1b56d79d9', {
+                cluster: 'ap1'
+            });
+
+            var channel = pusher.subscribe('my-channel');
+            channel.bind('jing-tracking', function (data) {
+                jsonArr.push(data)
+                $(".json-wrap").append('<h3>Action: ' + data.type + '</h3><pre id=' + data.distinct_id + '></pre>')
+                renderJson(data)
+                $('.wating').remove()
+            });
+
+            function renderJson(json) {
+                var options = {
+                    collapsed: false,
+                    rootCollapsable: false,
+                    withQuotes: false,
+                    withLinks: true
+                };
+                $('#' + json.distinct_id).jsonViewer(json, options);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Jing tracking online test</h1>
+    <div class="json-wrap">
+        <h4 class="wating">Wating traking logs...</h4>
+    </div>
+</body>
+
+</html>
