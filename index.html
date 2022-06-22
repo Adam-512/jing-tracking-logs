@@ -47,7 +47,7 @@
             var channel = pusher.subscribe('my-channel');
             channel.bind('jing-tracking', function (data) {
                 jsonArr.push(data)
-                $(".json-wrap").append('<h3>类型: ' + data.type + '  '+ data.event_type +'</h3><pre id=' + data.event_ms + '></pre>')
+                $(".json-wrap").append('<h3>类型: ' + data.type + '  '+ data.event_type +'</h3><pre id=' + data.event_ts + '></pre>')
                 renderJson(data)
                 $('.wating').remove()
             });
@@ -59,7 +59,7 @@
                     withQuotes: true,
                     withLinks: false
                 };
-                $('#' + json.event_ms).jsonViewer(json, options);
+                $('#' + json.event_ts).jsonViewer(json, options);
             }
         });
     </script>
