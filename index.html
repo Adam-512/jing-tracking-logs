@@ -35,7 +35,6 @@
 
     <script>
         $(function () {
-            let jsonArr = []
 
             // Enable pusher logging - don't include this in production
             Pusher.logToConsole = false;
@@ -46,20 +45,27 @@
 
             var channel = pusher.subscribe('my-channel');
             channel.bind('jing-tracking', function (data) {
-                jsonArr.push(data)
-                $(".json-wrap").append('<h3>类型: ' + data.type + '  '+ data.event_type +'</h3><pre id=' + data.event_ts + '></pre>')
-                renderJson(data)
+                let id
+                if (Array.isArray(data)) {
+                    id = data[0].event_ts
+                    $(".json-wrap").append('<h3>类型: 批量曝光</h3><pre id=' + id + '></pre>')
+                }
+                else {
+                    id = data.event_ts
+                    $(".json-wrap").append('<h3>类型: ' + data.type + '  ' + data.event_type + '</h3><pre id=' + id + '></pre>')
+                }
+                renderJson(data, id)
                 $('.wating').remove()
             });
 
-            function renderJson(json) {
+            function renderJson(json, id) {
                 var options = {
                     collapsed: true,
                     rootCollapsable: true,
                     withQuotes: true,
                     withLinks: false
                 };
-                $('#' + json.event_ts).jsonViewer(json, options);
+                $('#' + id).jsonViewer(json, options);
             }
         });
     </script>
