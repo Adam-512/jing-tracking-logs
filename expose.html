@@ -1,0 +1,81 @@
+<!doctype HTML>
+<html>
+
+<head>
+    <title>Jing tracking online test</title>
+    <meta charset="utf-8" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="json-viewer/jquery.json-viewer.js"></script>
+    <script src="https://js.pusher.com/7.1/pusher.min.js"></script>
+    <link href="json-viewer/jquery.json-viewer.css" type="text/css" rel="stylesheet">
+
+    <style type="text/css">
+        body {
+            margin: 0 100px;
+            font-family: sans-serif;
+        }
+
+        p.options label {
+            margin-right: 10px;
+        }
+
+        p.options input[type=checkbox] {
+            vertical-align: middle;
+        }
+
+        textarea#json-input {
+            width: 100%;
+            height: 200px;
+        }
+
+        pre#json-renderer {
+            border: 1px solid #aaa;
+        }
+    </style>
+
+    <script>
+        $(function () {
+
+            // Enable pusher logging - don't include this in production
+            Pusher.logToConsole = false;
+
+            var pusher = new Pusher('bfa00ec41b3450c8ad5c', {
+                cluster: 'ap2'
+            });
+
+            var channel = pusher.subscribe('my-channel');
+            channel.bind('jing-tracking', function (data) {
+                let id
+                if (Array.isArray(data)) {
+                    id = data[0].event_ts
+                    $(".json-wrap").append('<h3>类型: 批量曝光</h3><pre id=' + id + '></pre>')
+                }
+                else {
+                    id = data.event_ts
+                    $(".json-wrap").append('<h3>类型: ' + data.type + '  ' + data.event_type + '</h3><pre id=' + id + '></pre>')
+                }
+                renderJson(data, id)
+                $('.wating').remove()
+            });
+
+            function renderJson(json, id) {
+                var options = {
+                    collapsed: true,
+                    rootCollapsable: true,
+                    withQuotes: true,
+                    withLinks: false
+                };
+                $('#' + id).jsonViewer(json, options);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Jing tracking online test</h1>
+    <div class="json-wrap">
+        <h4 class="wating">Wating traking logs...</h4>
+    </div>
+</body>
+
+</html>
