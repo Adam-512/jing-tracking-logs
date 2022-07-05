@@ -52,7 +52,7 @@
                 }
                 else {
                     id = data.event_ts
-                    $(".json-wrap").append('<h3>类型: ' + data.type + '  ' + data.event_type||'' + '</h3><pre id=' + id + '></pre>')
+                    $(".json-wrap").append('<h3>类型: ' + data.type + '  ' + (data.event_type||'') + '</h3><pre id=' + id + '></pre>')
                 }
                 try {
                     data['event_value'] = JSON.parse(data['event_value'])
