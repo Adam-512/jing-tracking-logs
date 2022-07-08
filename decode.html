@@ -41,8 +41,13 @@
         margin: 20px 0;
     }
 
+    .btn-wrap {
+        text-align: right;
+        margin-top: 20px;
+    }
+
     .btn {
-        padding: 10px 20px;
+        padding: 5px 10px;
         color: #fff;
         background-color: cornflowerblue;
         font-size: 28px;
@@ -51,23 +56,19 @@
         border-radius: 5px;
         cursor: pointer;
     }
-    .btn.sm{
-        padding: 5px 10px;
+
+    .btn.red {
+        background-color: red;
     }
-    .btn.red{
-        background-color:red;
-    }
-    .btn.clear{
-        width: 100px;
-        align-self: flex-end;
-        margin-top: 20px;
+
+    .btn.decode {
+        margin-right: 30px;
     }
 </style>
 
 <body>
     <h1>Jing decode tracking data</h1>
 
-    <button class="btn decode">Decode</button>
     <div class="wrap text">
         <div>请输入要解码的内容:</div>
         <div>解码结果：</div>
@@ -75,7 +76,10 @@
     <div class="wrap">
         <div>
             <textarea id="data-area"></textarea>
-            <button class="btn sm red clear">Clear</button>
+            <div class="btn-wrap">
+                <button class="btn decode">Decode</button>
+                <button class="btn sm red clear">Clear</button>
+            </div>
         </div>
         <div>
             <div id="json"></div>
@@ -87,10 +91,10 @@
             try {
                 let text = $('#data-area').val()
                 let res = JSON.parse(decodeURIComponent(Base64.decode(text)))
-                if(typeof res.info == 'string'){
+                if (typeof res.info == 'string') {
                     res.info = JSON.parse(res.info)
                 }
-                if(typeof res.event_value == 'string'){
+                if (typeof res.event_value == 'string') {
                     res.event_value = JSON.parse(res.event_value)
                 }
                 renderJson(res)
@@ -98,7 +102,7 @@
                 console.log(error)
             }
         })
-        $('.clear').click(function(){
+        $('.clear').click(function () {
             $('#data-area').val('')
         })
         function renderJson(json) {
