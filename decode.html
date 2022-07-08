@@ -51,12 +51,23 @@
         border-radius: 5px;
         cursor: pointer;
     }
+    .btn.sm{
+        padding: 5px 10px;
+    }
+    .btn.red{
+        background-color:red;
+    }
+    .btn.clear{
+        width: 100px;
+        align-self: flex-end;
+        margin-top: 20px;
+    }
 </style>
 
 <body>
     <h1>Jing decode tracking data</h1>
 
-    <button class="btn">Decode</button>
+    <button class="btn decode">Decode</button>
     <div class="wrap text">
         <div>请输入要解码的内容:</div>
         <div>解码结果：</div>
@@ -64,6 +75,7 @@
     <div class="wrap">
         <div>
             <textarea id="data-area"></textarea>
+            <button class="btn sm red clear">Clear</button>
         </div>
         <div>
             <div id="json"></div>
@@ -71,7 +83,7 @@
     </div>
 
     <script>
-        $('.btn').click(function () {
+        $('.decode').click(function () {
             try {
                 let text = $('#data-area').val()
                 let res = JSON.parse(decodeURIComponent(Base64.decode(text)))
@@ -85,6 +97,9 @@
             } catch (error) {
                 console.log(error)
             }
+        })
+        $('.clear').click(function(){
+            $('#data-area').val('')
         })
         function renderJson(json) {
             var options = {
