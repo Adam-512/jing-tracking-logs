@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="json-viewer/jquery.json-viewer.css" type="text/css" rel="stylesheet">
+    <title>Decode</title>
+    <script src="https://cdn.jsdelivr.net/npm/js-base64@3.7.2/base64.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="json-viewer/jquery.json-viewer.js"></script>
+</head>
+
+<style>
+    .wrap {
+        display: flex;
+    }
+
+    .wrap>div {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+    }
+
+    .wrap>div:first-of-type {
+        margin-right: 20px;
+    }
+
+    .wrap>div:nth-of-type(2) {
+        overflow: auto;
+    }
+
+    .wrap textarea {
+        min-height: 50vh;
+        padding: 12px;
+    }
+
+    .wrap.text div {
+        margin: 20px 0;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        color: #fff;
+        background-color: cornflowerblue;
+        font-size: 28px;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <h1>Jing decode tracking data</h1>
+
+    <button class="btn">Decode</button>
+    <div class="wrap text">
+        <div>请输入要解码的内容:</div>
+        <div>解码结果：</div>
+    </div>
+    <div class="wrap">
+        <div>
+            <textarea id="data-area"></textarea>
+        </div>
+        <div>
+            <div id="json"></div>
+        </div>
+    </div>
+
+    <script>
+        $('.btn').click(function () {
+            try {
+                let text = $('#data-area').val()
+                let res = JSON.parse(decodeURIComponent(Base64.decode(text)))
+                if(typeof res.info == 'string'){
+                    res.info = JSON.parse(res.info)
+                }
+                if(typeof res.event_value == 'string'){
+                    res.event_value = JSON.parse(res.event_value)
+                }
+                renderJson(res)
+            } catch (error) {
+                console.log(error)
+            }
+        })
+        function renderJson(json) {
+            var options = {
+                collapsed: false,
+                rootCollapsable: true,
+                withQuotes: true,
+                withLinks: false
+            };
+            $('#json').jsonViewer(json, options);
+        }
+    </script>
+</body>
+
+</html>
